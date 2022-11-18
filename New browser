@@ -1,0 +1,62 @@
+from ast import Break
+import requests
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from requests.auth import HTTPBasicAuth
+
+class Example(QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+
+        vbox = QVBoxLayout(self)
+
+        self.webEngineView = QWebEngineView()
+#     self.loadPage()
+
+        vbox.addWidget(self.webEngineView)
+
+        self.setLayout(vbox)
+
+        self.setGeometry(300, 300, 350, 250)
+        self.setWindowTitle('Web Browser')
+       
+        
+        while True:
+            url1 = input("enter links: ")
+            r = requests.get(url1, allow_redirects=True)
+            if r.status_code==200:
+                self.webEngineView.setUrl(QUrl(url1))
+                print('Success!')
+
+                response = requests.get (url1)
+
+                open ("Download", "wb").write(response.content)
+            else:
+                with open('Error.html','r') as f:
+
+                    html = f.read()
+                self.webEngineView.setHtml(html)
+                print('Not Found')
+            self.show()
+          
+
+def main():
+
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
